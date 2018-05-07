@@ -1,0 +1,13 @@
+{
+	"productName": "macOS Update",
+	"directories": {
+		"output": "app-builds"
+	},
+	"mac": {
+		"icon": "dist",
+		"target": [
+			"dir"
+		],
+		"asar": true
+	}
+}

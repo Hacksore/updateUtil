@@ -1,0 +1,32 @@
+.container {
+	height: 100%;
+
+	.title {
+
+		text-align: center;
+		margin: 12px 0 0 0 !important;
+	}
+
+	.info {
+		margin:0;
+		padding:50px 20px;
+
+	}
+
+	.update-img{
+		display: flex;
+		justify-content: center; /* align horizontal */
+		align-items: center; /* align vertical */
+	}
+
+	.title{
+		margin: 0;
+		padding: 0;
+	}
+
+	ul{
+		padding: 0 0 0 20px;
+
+	}
+}
+

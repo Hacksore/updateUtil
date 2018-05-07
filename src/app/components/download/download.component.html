@@ -1,0 +1,41 @@
+<div class="container">
+	<h3 *ngIf="status != 'Completed'" class="title">Downloading macOS</h3>
+	<div *ngIf="status == 'Completed'">
+		<h3>Extracting Package</h3>
+		<img width="256" src="assets/img/extract.png" />
+
+		<p>
+			<strong>DO NOT</strong> power off your MacBook
+		</p>
+
+	</div>
+
+	<div *ngIf="downloadSpeed && status != 'Completed'">
+		<h5 style="float: left">{{ downloadSpeed }}/s</h5>
+		<h5 style="float: right">({{ currentDownloadProgress }} / {{ downloadSize}})</h5>
+	</div>
+	<div class="clearfix"></div>
+
+	<div *ngIf="status != 'Completed'" class="wrapper">
+		<div class="progress" style="height: 40px;">
+			<div class="progress-bar bg-success" role="progressbar" [style.width]="downloadProgress + '%'">{{downloadProgress}}%</div>
+		</div>
+	</div>
+
+
+	<div style="margin: 12px 0 0 0;" *ngIf="status != 'Completed'">
+		<p>Here are some things to keep in mind</p>
+		<ul>
+			<li>Save your work and close all applications</li>
+			<li>Please
+				<strong>DO NOT</strong> power off your MacBook</li>
+			<li>Stay connected to the network</li>
+			<li>Once the download completes the upgrade will begin shortly there after</li>
+			<li>Your Macook will reboot and it will take around
+				<strong>30-45 minutes</strong> to complete the update
+			</li>
+
+		</ul>
+	</div>
+
+</div>
