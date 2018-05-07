@@ -1,3 +1,4 @@
+![Test](https://i.imgur.com/pSCbFES.png)
 # updateUtil
 An Electron app that will help IT push macOS updates to non-admin users.
 
@@ -12,7 +13,23 @@ Some of the things I'd like to accomplish with this project. Keep in mind that a
 - [ ] Auto update
 
 # How it works? 
-Coming soon 
+**Tray App (Runs as user)**
+
+The GUI tray application is what the user will see. They can use this application to start the download and automated install of the macOS update.
+
+![screenshot1](https://i.imgur.com/iGbmTuC.png)
+![screenshot2](https://i.imgur.com/ZvFUtt9.png)
+
+
+**Daemon (Runs as root)**
+
+This is what the GUI will send commands to in order for the standard user to execute binaries which require elevation.
+
+# Running locally for development
+
+`npm install`
+
+`npm start`
 
 # Contribute 
 Feel free to help with this project 😎
