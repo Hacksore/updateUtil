@@ -1,0 +1,6 @@
+{
+	"downloadURL": "<insert URL>",
+	"version": "<macOS version>",
+	"autoUpdate": false,
+	"checkforUpdates": false
+}
