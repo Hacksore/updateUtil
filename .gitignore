@@ -40,3 +40,6 @@ package-lock.json
 # System Files
 .DS_Store
 Thumbs.db
+
+# pkg build app copy
+pkg/tmp/usr/local/macOSUpdate/macOS Update.app
