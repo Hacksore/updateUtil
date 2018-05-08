@@ -30,6 +30,13 @@ echo "Running Script As: $user" | log
 # FileVault Authenticated Reboots
 ##############################################
 
+
+# try unloading ithe plist first
+launchctl bootout "gui/$userID" "/Library/LaunchAgents/com.apple.install.osinstallersetupd.plist" | log
+
+# remove it before writing the file
+rm -f "/Library/LaunchAgents/com.apple.install.osinstallersetupd.plist" | log
+
 echo "<?xml version='1.0' encoding'UTF-8'?>
 <!DOCTYPE plist PUBLIC '-//Apple//DTD PLIST 1.0//EN' 'http://www.apple.com/DTDs/PropertyList-1.0.dtd'>
 <plist version='1.0'>
@@ -55,11 +62,11 @@ echo "<?xml version='1.0' encoding'UTF-8'?>
 </plist>" > "/Library/LaunchAgents/com.apple.install.osinstallersetupd.plist"
 
 # Set the permission on the file just made.
-/usr/sbin/chown root:wheel /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist
-/bin/chmod 644 /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist
+/usr/sbin/chown root:wheel /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist | log
+/bin/chmod 644 /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist | log
 
 # Load this LaunchAgent as the current user for FV reboots
-launchctl bootstrap "gui/$userID" /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist
+launchctl bootstrap "gui/$userID" /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist | log
 
 ##############################################
 # End FileVault Authenticated Reboots
@@ -68,6 +75,7 @@ launchctl bootstrap "gui/$userID" /Library/LaunchAgents/com.apple.install.osinst
 # Start the install in the background
 "$applicationPath/Contents/Resources/startosinstall" \
 --applicationpath "$applicationPath" \
+--nointeraction \
 --agreetolicense | log &
 
 exit 0
