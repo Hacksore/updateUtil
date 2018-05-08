@@ -17,7 +17,7 @@ export class DaemonHandler {
 
 		// todo: check if any other daemon is running and killall
 		// cant just blindly run this as we would kill this proc lol
-		//execSync("killall daemonHandler");
+		// execSync("killall daemonHandler");
 
 		if (fs.existsSync("/tmp/macOSUpdate")) {
 			fs.unlinkSync(path);
@@ -30,8 +30,8 @@ export class DaemonHandler {
 
 		fs.chmodSync(path, "777");
 
-		this.unixServer.on('connection', socket => {
-			//socket.write("test");
+		this.unixServer.on("connection", socket => {
+			// socket.write("test");
 			this.socket = socket;
 			socket.on("data", this.onData.bind(this));
 		});
@@ -58,7 +58,7 @@ export class DaemonHandler {
 	}
 
 	onData(data: any) {
-		let command = data.toString();
+		const command = data.toString();
 
 		switch (command) {
 			case "update":
@@ -68,11 +68,11 @@ export class DaemonHandler {
 				this.extractPKG();
 				break;
 			case "test":
-				console.log("Got test command")
+				console.log("Got test command");
 				break;
 		}
 	}
 
 }
 
-new DaemonHandler();
+const instance = new DaemonHandler();

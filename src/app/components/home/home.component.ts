@@ -1,11 +1,11 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, OnInit, isDevMode } from "@angular/core";
 import * as fs from "fs";
-import { ipcRenderer, shell } from 'electron';
+import { ipcRenderer, shell } from "electron";
 
 @Component({
-	selector: 'app-home',
-	templateUrl: './home.component.html',
-	styleUrls: ['./home.component.scss']
+	selector: "app-home",
+	templateUrl: "./home.component.html",
+	styleUrls: ["./home.component.scss"]
 })
 export class HomeComponent implements OnInit {
 	devMode: boolean;
@@ -14,13 +14,13 @@ export class HomeComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit() {
-		this.devMode = isDevMode()
-		console.log(process.env.NODE_ENV)
+		this.devMode = isDevMode();
+		console.log(process.env.NODE_ENV);
 
 		if (isDevMode()) {
-			console.log('👋 Development!');
+			console.log("👋 Development!");
 		} else {
-			console.log('💪 Production!');
+			console.log("💪 Production!");
 		}
 	}
 

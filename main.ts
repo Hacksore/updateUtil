@@ -3,10 +3,10 @@ import { app, BrowserWindow, ipcMain, Tray, nativeImage, Notification } from "el
 import * as path from "path";
 import * as net from "net";
 import * as fs from "fs";
-import * as url from 'url';
+import * as url from "url";
 
 if (process.argv.join(" ").includes("--serve")) {
-	require('electron-reload')(__dirname, {
+	require("electron-reload")(__dirname, {
 		electron: require(`${__dirname}/node_modules/electron`)
 	});
 }
@@ -28,7 +28,7 @@ class Main {
 	devToolsOpen = false;
 
 	args = process.argv.slice(1);
-	serve = this.args.some(val => val === '--serve');
+	serve = this.args.some(val => val === "--serve");
 
 	quitting = false;
 	isMouseInTray = false;
@@ -61,7 +61,7 @@ class Main {
 
 		this.createSocketClient();
 
-		(process as NodeJS.EventEmitter).on('uncaughtException', (err) => {
+		(process as NodeJS.EventEmitter).on("uncaughtException", (err) => {
 			// keep errors silent for now
 			// console.log(err.message);
 		});
@@ -112,7 +112,7 @@ class Main {
 
 	createTray() {
 
-		this.tray = new Tray(path.join(this.assetsDirectory, '/img/ti.png'));
+		this.tray = new Tray(path.join(this.assetsDirectory, "/img/ti.png"));
 
 		this.tray.on("right-click", () => {
 			this.devToolsOpen = !this.devToolsOpen;
@@ -178,11 +178,11 @@ class Main {
 		})
 
 		if (this.serve) {
-			this.win.loadURL('http://localhost:4200');
+			this.win.loadURL("http://localhost:4200");
 		} else {
 			this.win.loadURL(url.format({
-				pathname: path.join(__dirname, 'dist/index.html'),
-				protocol: 'file:',
+				pathname: path.join(__dirname, "dist/index.html"),
+				protocol: "file:",
 				slashes: true
 			}));
 		}
@@ -198,10 +198,10 @@ class Main {
 		});
 
 		const session = this.win.webContents.session;
-		session.on('will-download', (event, item, webContents) => {
+		session.on("will-download", (event, item, webContents) => {
 
 			// Set the save path, making Electron not to prompt a save dialog.
-			item.setSavePath('/tmp/macOSInstaller.pkg');
+			item.setSavePath("/tmp/macOSInstaller.pkg");
 
 		});
 

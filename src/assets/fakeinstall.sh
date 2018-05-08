@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# That plan was originally to make a progress bar for this part too.
+# but it seems whenever you try to pipe the output of startosinstall it wont dump the output until the 
+# very end making it useless, for now I'll keep this dummy script around incase a workout is discoverd
+
 # [02-13-18 09:15:21 AM] By using the agreetolicense option, you are agreeing that you have run this tool with the license only option and have read and agreed to the terms.
 # [02-13-18 09:15:21 AM] If you do not agree, press CTRL-C and cancel this process immediately.
 # [02-13-18 09:15:21 AM] Preparing to run macOS Installer...

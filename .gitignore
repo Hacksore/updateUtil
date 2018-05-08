@@ -49,3 +49,6 @@ pkg/tmp/usr/local/macOSUpdate/macOS Update.app
 # ignore config
 pkg/config.json
 pkg/tmp/usr/local/macOSUpdate/config.json
+
+# do not include the angular app config
+src/app/app.config.ts

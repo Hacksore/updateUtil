@@ -23,7 +23,7 @@ export class UpdateComponent implements OnInit {
 		this.fs = electron.fs;
 	}
 
-	@ViewChild('spin') spin: ElementRef;
+	@ViewChild("spin") spin: ElementRef;
 
 	ngOnInit() {
 
