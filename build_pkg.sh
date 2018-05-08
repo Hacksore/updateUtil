@@ -14,10 +14,20 @@ IDENTIFIER="com.macOS.updateUtil"
 # The location to copy the contents of files.
 INSTALL_LOCATION="pkg/tmp"
 
+# create build dir if does not exisit
+if [ ! -d "build/" ]; then
+	mkdir build
+fi
+
 # copy app
 rsync -a "app-builds/mac/macOS Update.app" "pkg/tmp/usr/local/macOSUpdate"
 
-mkdir build
+# copy config
+if [ ! -f "pkg/config.json" ]; then
+	cp "pkg/config.default.json" "pkg/config.json"
+fi
+
+cp "pkg/config.json" "pkg/tmp/usr/local/macOSUpdate/config.json"
 
 # Remove any extended attributes (ACEs).
 /usr/bin/xattr -rc $INSTALL_LOCATION/
