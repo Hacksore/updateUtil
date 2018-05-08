@@ -29,6 +29,7 @@ fi
 
 cp "pkg/config.json" "pkg/tmp/usr/local/macOSUpdate/config.json"
 
+
 # Remove any extended attributes (ACEs).
 /usr/bin/xattr -rc $INSTALL_LOCATION/
 /usr/bin/pkgbuild \
