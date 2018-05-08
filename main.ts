@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Tray, nativeImage } from "electron";
+import { app, BrowserWindow, ipcMain, Tray, nativeImage, Notification } from "electron";
 
 import * as path from "path";
 import * as net from "net";
@@ -90,7 +90,7 @@ class Main {
 			this.socketConnected = false;
 
 			const reconnectTimer = setInterval(() => {
-				console.log("Connection to backend daemon...");
+				console.log("Attempt connection to backend daemon...");
 				this.clientSocket = net.createConnection(path, () => {
 					console.log("reconnected killing timer");
 					this.socketConnected = true;
@@ -203,7 +203,8 @@ class Main {
 			// Set the save path, making Electron not to prompt a save dialog.
 			item.setSavePath('/tmp/macOSInstaller.pkg');
 
-		})
+		});
+
 
 	}
 
