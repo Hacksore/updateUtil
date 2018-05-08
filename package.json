@@ -1,6 +1,6 @@
 {
 	"name": "macos-update",
-	"version": "1.2.7",
+	"version": "1.2.8",
 	"description": "An Electron app that will help IT push macOS updates to non-admin users",
 	"homepage": "https://github.com/Hacksore/updateUtil",
 	"author": {
@@ -29,7 +29,8 @@
 		"electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:tsc && electron . --serve",
 		"electron:local": "npm run build:prod && electron .",
 		"buildapp": "npm run build:prod && npx electron-builder build --mac && npm run build:daemon && npm run add:daemon",
-		"test": "karma start ./karma.conf.js"
+		"test": "karma start ./karma.conf.js",
+		"lint": "tslint -p tslint.json 'src/**/*.ts' && tslint -p tslint.json 'daemonHandler.ts'"
 	},
 	"dependencies": {
 		"@angular/core": "5.2.9",
