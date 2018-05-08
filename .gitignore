@@ -48,3 +48,4 @@ pkg/tmp/usr/local/macOSUpdate/macOS Update.app
 
 # ignore config
 pkg/config.json
+pkg/tmp/usr/local/macOSUpdate/config.json
