@@ -15,8 +15,6 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
 import { ElectronService } from "./providers/electron.service";
 
-import { WebviewDirective } from "./directives/webview.directive";
-
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./components/home/home.component";
 import { DownloadComponent } from "./components/download/download.component";
@@ -34,8 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		HomeComponent,
 		DownloadComponent,
 		UpdateComponent,
-		HelpComponent,
-		WebviewDirective
+		HelpComponent
 	],
 	imports: [
 		BrowserModule,
