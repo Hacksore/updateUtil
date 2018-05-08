@@ -2,6 +2,10 @@
 # updateUtil
 An Electron app that will help IT push macOS updates to non-admin users.
 
+![status](https://travis-ci.org/Hacksore/updateUtil.svg?branch=master)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/updateUtil/Lobby)
+![deps](https://david-dm.org/hacksore/updateUtil.svg)
+
 # Roadmap
 Some of the things I'd like to accomplish with this project. Keep in mind that all these features currently done are rather poor implementations and have potential security ricks associated with them. One of the big challenges and focus points of the project will also be security.
 - [x] Download update
