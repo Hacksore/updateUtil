@@ -15,13 +15,7 @@ export class HomeComponent implements OnInit {
 
 	ngOnInit() {
 		this.devMode = isDevMode();
-		console.log(process.env.NODE_ENV);
 
-		if (isDevMode()) {
-			console.log("👋 Development!");
-		} else {
-			console.log("💪 Production!");
-		}
 	}
 
 
