@@ -1,29 +1,28 @@
 <div class="container">
-	<h3 *ngIf="status != 'Completed'" class="title">Downloading macOS</h3>
-	<div *ngIf="status == 'Completed'">
+	<h3 *ngIf="status != 'complete'" class="title">Downloading macOS</h3>
+	<div *ngIf="status == 'complete'">
 		<h3>Extracting Package</h3>
 		<img width="256" src="assets/img/extract.png" />
 
-		<p>
+		<h3>
 			<strong>DO NOT</strong> power off your MacBook
-		</p>
+		</h3>
 
 	</div>
 
-	<div *ngIf="downloadSpeed && status != 'Completed'">
-		<h5 style="float: left">{{ downloadSpeed }}/s</h5>
-		<h5 style="float: right">({{ currentDownloadProgress }} / {{ downloadSize}})</h5>
+	<div *ngIf="speed != null && speed != '' && status != 'complete'">
+		<h5 style="float: left">{{ speed }}/s</h5>
+		<h5 style="float: right">({{ transferred }} / {{ totalSize }})</h5>
 	</div>
 	<div class="clearfix"></div>
 
-	<div *ngIf="status != 'Completed'" class="wrapper">
+	<div *ngIf="status != 'complete'" class="wrapper">
 		<div class="progress" style="height: 40px;">
-			<div class="progress-bar bg-success" role="progressbar" [style.width]="downloadProgress + '%'">{{downloadProgress}}%</div>
+			<div class="progress-bar bg-success" role="progressbar" [style.width]="currentPercent + '%'">{{currentPercent}}%</div>
 		</div>
 	</div>
 
-
-	<div style="margin: 12px 0 0 0;" *ngIf="status != 'Completed'">
+	<div style="margin: 12px 0 0 0;" *ngIf="status != 'complete'">
 		<p>Here are some things to keep in mind</p>
 		<ul>
 			<li>Save your work and close all applications</li>
