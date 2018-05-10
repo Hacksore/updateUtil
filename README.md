@@ -1,6 +1,6 @@
 ![Test](https://i.imgur.com/pSCbFES.png)
 # updateUtil
-An simplistic tray application that will help Mac administrators distribute macOS updates to non-admin users.
+A simplistic tray application that will help Mac administrators distribute macOS updates to non-admin users.
 
 ![status](https://travis-ci.org/Hacksore/updateUtil.svg?branch=master)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/updateUtil/Lobby)
