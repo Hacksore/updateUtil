@@ -1,5 +1,5 @@
 {
-	"productName": "macOS Update",
+	"productName": "updateUtil",
 	"directories": {
 		"output": "app-builds"
 	},
@@ -8,6 +8,19 @@
 		"target": [
 			"dir"
 		],
-		"asar": true
+		"asar": true,
+		"files": [
+			"**/*",
+			"!app-builds/",
+			"!builds/",
+			"!pkg/",
+			"!scripts/",
+			"!hooks/",
+			"!.git/",
+			"!node_modules/*",
+			"!*.json",
+			"!*.md",
+			"!updateUtilDaemon"
+		]
 	}
 }
