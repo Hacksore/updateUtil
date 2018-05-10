@@ -1,6 +1,6 @@
 {
 	"name": "macos-update",
-	"version": "1.2.8",
+	"version": "0.1.0",
 	"description": "An Electron app that will help IT push macOS updates to non-admin users",
 	"homepage": "https://github.com/Hacksore/updateUtil",
 	"author": {
@@ -24,17 +24,20 @@
 		"build:prod": "node hooks/environments/set_profile.js && ng build --prod && npm run electron:tsc",
 		"ng:serve": "ng serve",
 		"electron:tsc": "tsc main.ts",
-		"build:daemon": "tsc daemonHandler.ts && pkg daemonHandler.js --targets node9-macos-x64",
-		"add:daemon": "cp daemonHandler 'app-builds/mac/macOS Update.app/Contents/Resources/'",
+		"build:daemon": "tsc daemonHandler.ts && pkg daemonHandler.js --output updateUtilDaemon --targets node9-macos-x64",
+		"add:daemon": "cp updateUtilDaemon 'app-builds/mac/updateUtil.app/Contents/Resources/'",
 		"electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:tsc && electron . --serve",
 		"electron:local": "npm run build:prod && electron .",
-		"buildapp": "npm run build:prod && npx electron-builder build --mac && npm run build:daemon && npm run add:daemon",
+		"buildapp": "npm run build:prod && npx electron-builder build --dir --mac && npm run build:daemon && npm run add:daemon",
+		"pkg": "npm run buildapp && bash pkg/build_pkg.sh",
 		"test": "karma start ./karma.conf.js",
 		"lint": "tslint -p tslint.json 'src/**/*.ts' && tslint -p tslint.json 'daemonHandler.ts'"
 	},
 	"dependencies": {
 		"@angular/core": "5.2.9",
-		"moment": "^2.22.1"
+		"hh-mm-ss": "^1.2.0",
+		"request": "^2.85.0",
+		"request-progress": "^3.0.0"
 	},
 	"devDependencies": {
 		"@angular/cli": "1.7.4",
@@ -54,6 +57,7 @@
 		"@types/jasmine": "2.8.6",
 		"@types/jasminewd2": "2.0.3",
 		"@types/node": "7.0.7",
+		"@types/request": "^2.47.0",
 		"codelyzer": "4.2.1",
 		"core-js": "2.5.5",
 		"cross-env": "5.1.4",

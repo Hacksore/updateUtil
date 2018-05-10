@@ -1,0 +1,24 @@
+#!/bin/sh
+## postinstall
+
+currentUser=$(/bin/ls -l /dev/console | /usr/bin/awk '{ print $3 }')
+
+# attempt to kill app first
+/usr/bin/sudo -u "$currentUser" /bin/launchctl unload "/Library/LaunchAgents/com.hacksore.updateUtil.launcher.plist"
+
+/usr/bin/killall "updateUtil"
+
+# load the app
+/usr/bin/sudo -u "$currentUser" /bin/launchctl load "/Library/LaunchAgents/com.hacksore.updateUtil.launcher.plist"
+
+# unload the daemon
+/bin/launchctl unload "/Library/LaunchDaemons/com.hacksore.updateUtil.daemon.plist"
+
+# kill damons
+/usr/bin/killall "updateUtilDaemon"
+
+# load the damon
+/bin/launchctl load "/Library/LaunchDaemons/com.hacksore.updateUtil.daemon.plist"
+
+exit 0
+

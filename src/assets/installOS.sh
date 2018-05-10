@@ -5,9 +5,6 @@ user=$(whoami)
 # Current logged in user
 currentUser=$(/bin/ls -l /dev/console | /usr/bin/awk '{ print $3 }')
 
-# Get the userID
-userID=$(id -u "$currentUser")
-
 # Path to the installer
 applicationPath="$1"
 
@@ -37,9 +34,10 @@ launchctl bootout "gui/$userID" "/Library/LaunchAgents/com.apple.install.osinsta
 # remove it before writing the file
 rm -f "/Library/LaunchAgents/com.apple.install.osinstallersetupd.plist" | log
 
-echo "<?xml version='1.0' encoding'UTF-8'?>
-<!DOCTYPE plist PUBLIC '-//Apple//DTD PLIST 1.0//EN' 'http://www.apple.com/DTDs/PropertyList-1.0.dtd'>
-<plist version='1.0'>
+cat << EOP > /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
 <dict>
     <key>Label</key>
     <string>com.apple.install.osinstallersetupd</string>
@@ -59,13 +57,18 @@ echo "<?xml version='1.0' encoding'UTF-8'?>
         <string>$applicationPath/Contents/Frameworks/OSInstallerSetup.framework/Resources/osinstallersetupd</string>
     </array>
 </dict>
-</plist>" > "/Library/LaunchAgents/com.apple.install.osinstallersetupd.plist"
+</plist>
+EOP
 
 # Set the permission on the file just made.
 /usr/sbin/chown root:wheel /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist | log
 /bin/chmod 644 /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist | log
 
 # Load this LaunchAgent as the current user for FV reboots
+# try as the current user?
+# Get the userID
+echo "Loading osinstallersetupd as gui/$userID ($currentUser)" | log
+userID=$(id -u "$currentUser")
 launchctl bootstrap "gui/$userID" /Library/LaunchAgents/com.apple.install.osinstallersetupd.plist | log
 
 ##############################################

@@ -35,25 +35,17 @@ export class DownloadComponent implements OnInit {
 	window: BrowserWindow;
 	config;
 
-	downloadProgress = 0;
-	status: String = "";
-	speed: String = "";
-
-	// TODO: rework this cluster fuck variable name nightmare
-
-	lastBytesRecieved = 0;
-	totalBytesRecieved = 0;
-	bytesPerSecond = 0;
-	downloadSpeed: String = "";
-	downloadSize: String = "";
-	currentDownloadProgress: String = "";
-	startTime = 0;
-	totalBytes = 0;
-	eta: String = "";
 
 	ipcRenderer: IpcRenderer;
-
 	socket: Socket;
+
+	// vars download
+	eta: String;
+	currentPercent: Number;
+	transferred: String = "";
+	totalSize: String = "";
+	speed: String = "";
+	status: String = "";
 
 	@ViewChild("frame") iframe: ElementRef;
 
@@ -64,91 +56,62 @@ export class DownloadComponent implements OnInit {
 
 		this.ipcRenderer = electron.ipcRenderer;
 
-		this.socket.on("data", (buffer) => {
+		this.socket.on("data", (buffer) => this.ngZone.run(() => {
 			const message = buffer.toString();
-			console.log("I got data from server: " + message);
 
+			// TODO: rework this into json
 			if (message === "extractFinished") {
-				this.router.navigateByUrl("/beginUpdate");
+				return this.router.navigateByUrl("/beginUpdate");
 			}
-		});
+
+			const json = JSON.parse(message);
+			if (json == null) {
+				return;
+			}
+
+			if (json.downloadInfo !== undefined) {
+				this.totalSize = json.downloadInfo.totalSize;
+			}
+
+			if (json.downloadProgress !== undefined) {
+				this.eta = json.downloadProgress.eta;
+				this.currentPercent = json.downloadProgress.percent;
+				this.transferred = json.downloadProgress.transferred;
+				this.speed = json.downloadProgress.speed;
+
+				// update progress for tray icon
+				this.ipcRenderer.send("progress", {
+					percent: this.currentPercent
+				});
+			}
+
+			if (json.downloadComplete !== undefined) {
+				this.downloadComplete();
+
+			}
+
+		}));
 
 	}
 
-	setProgressBar(progress: number) {
-		progress = progress <= 0 ? progress : progress / 100;
+	downloadComplete() {
+		this.status = "complete";
 
-		this.window.setProgressBar(progress);
+		const notify = new Notification("Download compelete", {
+			body: "Download has completed successfuly"
+		});
+
+		// tell main when download is done
+		this.ipcRenderer.send("download-finshed", {});
 	}
 
 	ngOnInit() {
 
-		setInterval(() => {
-			this.bytesPerSecond = this.totalBytesRecieved - this.lastBytesRecieved;
-			this.lastBytesRecieved = this.totalBytesRecieved;
+		// tell daemon to start download
 
-			// ETA still a mess :D
-			const elapsedTime = (new Date().getTime()) - this.startTime;
-			const chunksPerTime = this.bytesPerSecond / elapsedTime;
-			const estimatedTotalTime = this.totalBytes / chunksPerTime;
-			const timeLeftInSeconds = (estimatedTotalTime - elapsedTime) / 1000;
-			this.eta = moment.unix(timeLeftInSeconds).format("h:mm:ss");
+		// might try waiting a second ot start dowload
+		this.socket.write("download");
 
-			this.downloadSpeed = humanFileSize(this.bytesPerSecond, true);
-
-		}, 1000);
-
-
-		// hacky solution, might want to look at using request lib instead
-
-		// I think we can get away from the daemon doing the download
-		// as long as we do a check sum to validate the bits we could be ok idk
-		const winRef = window.open(this.config.downloadURL, "DL", "left=10000, top=100000, width=10, height=10, visible=none");
-
-		const session = this.window.webContents.session;
-		session.on("will-download", (event, item, webContents) => {
-
-			// alert("Download has begun, please wait...");
-			this.ipcRenderer.send("show-window");
-
-			this.startTime = item.getStartTime();
-			this.totalBytes = item.getTotalBytes();
-
-			this.downloadSize = humanFileSize(item.getTotalBytes(), true);
-
-			this.electron.ipcRenderer.send("start-download");
-
-			item.on("updated", (e, state) => this.ngZone.run(() => {
-				if (state === "progressing") {
-					this.status = "Downloading";
-					this.totalBytesRecieved = item.getReceivedBytes();
-					this.downloadProgress = Math.floor((item.getReceivedBytes() / item.getTotalBytes()) * 100);
-					this.currentDownloadProgress = humanFileSize(item.getReceivedBytes(), true);
-
-					// send the progress status to the main process
-					this.ipcRenderer.send("progress", {
-						percent: this.downloadProgress
-					});
-
-					this.setProgressBar(this.downloadProgress);
-				}
-			}));
-
-			item.once("done", (e, state) => this.ngZone.run(() => {
-				if (state === "completed") {
-					this.status = "Completed";
-					console.log("Downloaded PKG successfully");
-
-					this.socket.write("extract");
-
-					// send the progress status to the main process
-					this.ipcRenderer.send("download-finished");
-
-				} else {
-					console.log(`Download failed: ${state}`);
-				}
-			}));
-		});
 
 	}
 

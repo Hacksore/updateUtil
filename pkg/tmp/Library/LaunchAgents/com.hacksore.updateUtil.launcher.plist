@@ -2,15 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>KeepAlive</key>
-	<true/>
 	<key>Label</key>
-	<string>com.macOSUpdate.daemon</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>/usr/local/macOSUpdate/macOS Update.app/Contents/Resources/daemonHandler</string>
-	</array>
+	<string>com.hacksore.updateUtil.launcher</string>
+	<key>Program</key>
+	<string>/usr/local/updateUtil/updateUtil.app/Contents/MacOS/updateUtil</string>
 	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
 	<true/>
 </dict>
 </plist>

@@ -8,7 +8,7 @@
 /build
 main.js
 daemonHandler.js
-daemonHandler
+updateUtilDaemon
 
 # dependencies
 /node_modules
@@ -43,12 +43,11 @@ package-lock.json
 Thumbs.db
 
 # pkg build app copy
-pkg/tmp/usr/local/macOSUpdate/macOS Update.app
-
+pkg/tmp/usr/local/updateUtil/updateUtil.app
 
 # ignore config
 pkg/config.json
-pkg/tmp/usr/local/macOSUpdate/config.json
+pkg/tmp/usr/local/updateUtil/config.json
 
 # do not include the angular app config
 src/app/app.config.ts
