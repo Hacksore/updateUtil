@@ -5,6 +5,7 @@ import * as net from "net";
 import * as fs from "fs";
 import * as url from "url";
 
+
 if (process.argv.join(" ").includes("--serve")) {
 	require("electron-reload")(__dirname, {
 		electron: require(`${__dirname}/node_modules/electron`)
@@ -12,7 +13,6 @@ if (process.argv.join(" ").includes("--serve")) {
 }
 
 declare var global;
-
 
 class Main {
 
@@ -23,7 +23,7 @@ class Main {
 
 	// janky way to load the config, this might be better in a singlton?
 	// that way more error checking and such can be done
-	config = JSON.parse(fs.readFileSync("/usr/local/macOSUpdate/config.json").toString());
+	config = JSON.parse(fs.readFileSync("/usr/local/updateUtil/config.json").toString());
 
 	devToolsOpen = false;
 
@@ -35,6 +35,7 @@ class Main {
 	socketConnected = false;
 
 	clientSocket: net.Socket;
+	socketPath = "/var/run/updateUtil.sock";
 
 	constructor() {
 		// Don"t show the app in the dock
@@ -66,48 +67,49 @@ class Main {
 			// console.log(err.message);
 		});
 
-		// create tmp script
-		let data = fs.readFileSync(this.assetsDirectory + "/installOS.sh").toString();
-		// TODO: put this file in a more secure location
-		// currently this a a security risk as the user has access to /tmp
-		fs.writeFile("/tmp/installOS.sh", data, () => {
-			console.log("install shell script created");
-			fs.chmod("/tmp/installOS.sh", 0x770, (err) => {
-
-			})
-		});
 
 	}
 
 	createSocketClient() {
 
-		let path = "/tmp/macOSUpdate";
-		this.clientSocket = net.createConnection(path);
+		this.clientSocket = net.createConnection(this.socketPath);
 
 		global.socket = this.clientSocket;
 
 		this.clientSocket.on("error", (err) => {
-			this.socketConnected = false;
-
-			const reconnectTimer = setInterval(() => {
-				console.log("Attempt connection to backend daemon...");
-				this.clientSocket = net.createConnection(path, () => {
-					console.log("reconnected killing timer");
-					this.socketConnected = true;
-					clearInterval(reconnectTimer);
-				});
-
-			}, 3000);
+			this.reconnectSocket();
 		});
 
 		this.clientSocket.on("connect", () => {
+			console.log("Connected succesfully to the updateUtil daemon");
+
 			this.socketConnected = true;
 		});
 
-		this.clientSocket.on("data", (message) => {
-			// console.log("I got data from server: " + message);
-			//this.clientSocket.write(message);
+		this.clientSocket.on("end", () => {
+			console.log("Socket closed attempt reconnect method");
+			this.reconnectSocket();
 		});
+
+		this.clientSocket.on("data", (data) => {
+			// console.log(data.toString());
+
+			// this.clientSocket.write(message);
+		});
+	}
+
+	reconnectSocket() {
+		this.socketConnected = false;
+
+		const reconnectTimer = setInterval(() => {
+			console.log("Attempt connection to backend daemon...");
+			this.clientSocket = net.createConnection(this.socketPath, () => {
+				console.log("reconnected killing timer");
+				this.socketConnected = true;
+				clearInterval(reconnectTimer);
+			});
+
+		}, 3000);
 	}
 
 	createTray() {
@@ -144,8 +146,10 @@ class Main {
 		})
 
 		ipcMain.on("download-finshed", (event, arg) => {
+			console.log("Daemon reported that the downloaded is done");
+
 			this.tray.setTitle("");
-			this.tray.setImage(path.join(this.assetsDirectory, "/img/ti.png"));
+			// this.tray.setImage(path.join(this.assetsDirectory, "/img/ti.png"));
 		})
 
 	}
